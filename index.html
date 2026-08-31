@@ -42,10 +42,12 @@
     color: var(--cream);
   }
 
-  body.lock-scroll{
-    height:100svh;
-    overflow:hidden;
-  }
+  /* removido o travamento de rolagem que existia aqui (body.lock-scroll
+     com overflow:hidden): ele bloqueava o scroll mesmo dentro da própria
+     capa, tornando o formulário de RSVP inalcançável em telas onde o
+     conteúdo da capa é mais alto que a tela do aparelho. não era
+     necessário pra esconder o resto do kit — isso já é garantido pela
+     classe .hidden (display:none) nas seções seguintes. */
 
   .mono{
     font-family:'JetBrains Mono', monospace;
@@ -1422,28 +1424,6 @@
   </div><!-- /afterRsvp -->
 
 <script>
-  // ------------------------------------------------------------------
-  // DIAGNÓSTICO TEMPORÁRIO — mostra qualquer erro de JavaScript direto
-  // na tela, num aviso vermelho no topo. Remover depois de identificar
-  // e corrigir o problema do "não consigo confirmar presença".
-  // ------------------------------------------------------------------
-  window.addEventListener('error', function(evento) {
-    var caixa = document.createElement('div');
-    caixa.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;' +
-      'background:#c0392b;color:#fff;padding:14px;font-family:monospace;' +
-      'font-size:12px;white-space:pre-wrap;line-height:1.5;';
-    caixa.textContent = 'ERRO DE JAVASCRIPT: ' + evento.message +
-      ' (linha ' + evento.lineno + ', coluna ' + evento.colno + ')';
-    document.body.appendChild(caixa);
-  });
-  window.addEventListener('unhandledrejection', function(evento) {
-    var caixa = document.createElement('div');
-    caixa.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;' +
-      'background:#c0392b;color:#fff;padding:14px;font-family:monospace;' +
-      'font-size:12px;white-space:pre-wrap;line-height:1.5;';
-    caixa.textContent = 'ERRO ASSÍNCRONO: ' + (evento.reason && evento.reason.message ? evento.reason.message : evento.reason);
-    document.body.appendChild(caixa);
-  });
 
   /* ======================================================================
      FOTOS DA CASA — usadas na capa (fundo) e na seção "a mensagem".
