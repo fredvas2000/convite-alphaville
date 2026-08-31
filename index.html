@@ -326,14 +326,18 @@
     top:20px;
     left:20px;
     z-index:50;
+    width:48px;
+    height:48px;
+    padding:0;
     display:flex;
     align-items:center;
-    gap:10px;
+    justify-content:center;
     background: linear-gradient(135deg, var(--stone) 0%, var(--stone-dim) 100%);
-    padding:9px 18px 9px 10px;
-    border-radius:999px;
+    border-radius:50%;
     border:1px solid var(--brick-dim);
     box-shadow: 0 4px 14px rgba(43,38,32,0.14);
+    cursor:pointer;
+    font-family:inherit;
     transition: background var(--dur) ease, border-color var(--dur) ease, box-shadow var(--dur) ease, transform 220ms ease;
   }
   body.night .estalecas-fixed{
@@ -341,7 +345,115 @@
     border-color: var(--amber);
     box-shadow: 0 4px 18px rgba(0,0,0,0.4);
   }
-  .estalecas-fixed.pulse{ transform: scale(1.08); }
+  .estalecas-fixed.pulse{ transform: scale(1.12); }
+  .estalecas-fixed .estalecas-coin{ width:28px; height:28px; }
+
+  .estalecas-painel{
+    position:fixed;
+    top:76px;
+    left:20px;
+    z-index:49;
+    width:min(300px, calc(100vw - 40px));
+    background: var(--stone);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 22px 20px;
+    box-shadow: 0 12px 30px rgba(43,38,32,0.2);
+    transition: background var(--dur) ease, border-color var(--dur) ease;
+  }
+  body.night .estalecas-painel{
+    background: var(--night-sky2);
+    border-color: var(--line-night);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+  }
+
+  .estalecas-painel-nome{
+    font-family:'Shippori Mincho', serif;
+    font-size:1.2rem;
+    color: var(--ink);
+    margin:0 0 4px;
+    transition: color var(--dur) ease;
+  }
+  body.night .estalecas-painel-nome{ color: var(--cream); }
+
+  .estalecas-painel-numero{
+    font-family:'Shippori Mincho', serif;
+    font-size:2.6rem;
+    font-weight:600;
+    line-height:1;
+    color: var(--brick);
+    margin:2px 0 0;
+    transition: color var(--dur) ease;
+  }
+  body.night .estalecas-painel-numero{ color: var(--amber); }
+
+  .estalecas-painel-numero-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    opacity:0.55;
+    margin:2px 0 18px;
+  }
+
+  .estalecas-painel-titulo{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.74rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color: var(--brick);
+    margin:0 0 14px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    transition: color var(--dur) ease, border-color var(--dur) ease;
+  }
+  body.night .estalecas-painel-titulo{ color: var(--amber); border-color: var(--line-night); }
+
+  .estalecas-lista{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .estalecas-painel-item,
+  .estalecas-lista li{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    font-size:0.9rem;
+    color: var(--ink-soft);
+    transition: color var(--dur) ease;
+  }
+  body.night .estalecas-painel-item,
+  body.night .estalecas-lista li{ color:#C9C4B0; }
+
+  .estalecas-check{
+    flex-shrink:0;
+    width:16px;
+    font-size:0.85rem;
+    color: var(--ink-soft);
+    transition: color var(--dur) ease;
+  }
+  .estalecas-check.feito{ color: var(--brick); }
+  body.night .estalecas-check.feito{ color: var(--amber); }
+
+  .estalecas-painel-item{ margin-top:12px; padding-top:12px; border-top:1px solid var(--line); transition: border-color var(--dur) ease; }
+  body.night .estalecas-painel-item{ border-color: var(--line-night); }
+
+  .estalecas-painel-total{
+    margin:14px 0 0;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    opacity:0.55;
+    transition: border-color var(--dur) ease;
+  }
+  body.night .estalecas-painel-total{ border-color: var(--line-night); }
 
   .estalecas-coin{
     width:26px; height:26px;
@@ -365,29 +477,6 @@
     fill: var(--brick);
     font-weight:600;
   }
-
-  .estalecas-texto{
-    display:flex;
-    flex-direction:column;
-    line-height:1.05;
-  }
-  .estalecas-numero{
-    font-family:'Shippori Mincho', serif;
-    font-size:1.15rem;
-    font-weight:600;
-    color: var(--ink);
-    transition: color var(--dur) ease;
-  }
-  body.night .estalecas-numero{ color: var(--cream); }
-  .estalecas-label{
-    font-family:'JetBrains Mono', monospace;
-    font-size:0.62rem;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color: var(--ink-soft);
-    transition: color var(--dur) ease;
-  }
-  body.night .estalecas-label{ color:#C9C4B0; }
 
   .estalecas-popup{
     position:absolute;
@@ -413,10 +502,10 @@
   }
 
   @media (max-width:600px){
-    .estalecas-fixed{ top:14px; left:14px; padding:7px 14px 7px 8px; gap:8px; }
-    .estalecas-coin{ width:22px; height:22px; }
-    .estalecas-numero{ font-size:1rem; }
-    .estalecas-label{ font-size:0.58rem; }
+    .estalecas-fixed{ top:14px; left:14px; width:42px; height:42px; }
+    .estalecas-fixed .estalecas-coin{ width:24px; height:24px; }
+    .estalecas-painel{ top:64px; left:14px; padding:18px 18px 16px; }
+    .estalecas-painel-numero{ font-size:2.2rem; }
   }
 
   @media (max-width:600px){
@@ -996,17 +1085,26 @@
     </button>
   </div>
 
-  <div class="estalecas-fixed hidden" id="estalecasCounter">
+  <button type="button" class="estalecas-fixed hidden" id="estalecasCounter" aria-expanded="false" aria-label="ver suas estalecas">
     <svg class="estalecas-coin" viewBox="0 0 32 32" aria-hidden="true">
       <circle cx="16" cy="16" r="14"/>
       <circle cx="16" cy="16" r="9.5"/>
       <text x="16" y="21" text-anchor="middle">e</text>
     </svg>
-    <span class="estalecas-texto">
-      <span class="estalecas-numero" id="estalecasNumero">0</span>
-      <span class="estalecas-label">estalecas</span>
-    </span>
     <span class="estalecas-popup" id="estalecasPopup"></span>
+  </button>
+
+  <div class="estalecas-painel hidden" id="estalecasPainel">
+    <p class="estalecas-painel-nome" id="estalecasPainelNome">—</p>
+    <p class="estalecas-painel-numero" id="estalecasNumero">0</p>
+    <p class="estalecas-painel-numero-label">estalecas</p>
+    <p class="estalecas-painel-titulo">como ganhar mais</p>
+    <ul class="estalecas-lista" id="estalecasListaDesafios"></ul>
+    <div class="estalecas-painel-item" id="estalecasItemFotos">
+      <span class="estalecas-check" id="estalecasFotosCheck">○</span>
+      <span>Enviar fotos pra galeria — <span id="estalecasFotosProgresso">0/5</span> · 10 cada</span>
+    </div>
+    <p class="estalecas-painel-total">total possível: 110</p>
   </div>
 
   <!-- HERO + RSVP -->
@@ -1220,7 +1318,7 @@
         <span class="acc-chevron">+</span>
       </summary>
       <div class="acc-body">
-        <p class="acc-foot-note" style="margin-top:0;">Vamos soltando provocações no grupo do WhatsApp. Acertou a palavra? Desbloqueie aqui.</p>
+        <p class="acc-foot-note" style="margin-top:0;">Vamos soltando provocações no grupo do WhatsApp. Acertou a palavra? Desbloqueie aqui — cada uma vale 10 estalecas.</p>
         <div class="challenge-badges" id="challengeBadges" aria-hidden="true"></div>
         <div class="challenge-form">
           <input type="text" id="challengeInput" class="rsvp-input" placeholder="palavra-código" autocomplete="off">
@@ -1294,7 +1392,7 @@
   <section class="polaroid-section">
     <p class="polaroid-eyebrow">galeria coletiva</p>
     <h2 class="polaroid-title">instantâneos</h2>
-    <p class="polaroid-intro">Cada foto tirada nesse fim de semana vira uma polaroid aqui — soltas na parede, do jeito que vão chegando.</p>
+    <p class="polaroid-intro">Cada foto tirada nesse fim de semana vira uma polaroid aqui — soltas na parede, do jeito que vão chegando. Suas primeiras cinco valem 10 estalecas cada.</p>
 
     <div class="polaroid-board" id="polaroidBoard"></div>
     <p class="polaroid-empty" id="polaroidEmpty">Ainda não chegou nenhuma foto — a primeira pode ser a sua.</p>
@@ -1508,17 +1606,66 @@
     catch (e) { /* segue sem persistir entre visitas — não quebra a experiência atual */ }
   }
 
+  // código único e invisível, gerado sozinho no aparelho do convidado — é essa
+  // marca (não o nome) que identifica de quem é a pontuação por trás dos panos.
+  // assim, duas pessoas com o mesmo nome nunca se misturam.
+  let idConvidadoAtual = '';
+
+  function getIdConvidado() {
+    if (idConvidadoAtual) return idConvidadoAtual;
+    try {
+      const salvo = localStorage.getItem('idConvidado');
+      if (salvo) { idConvidadoAtual = salvo; return salvo; }
+    } catch (e) { /* segue sem persistir — gera um novo abaixo */ }
+
+    const novoId = (crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+
+    idConvidadoAtual = novoId;
+    try { localStorage.setItem('idConvidado', novoId); } catch (e) { /* ok seguir só em memória */ }
+    return novoId;
+  }
+
   // chama o Apps Script silenciosamente. usa GET (query string) de propósito,
   // pra nunca esbarrar em bloqueio de CORS no navegador do convidado.
   function chamarBackendPontuacao(action, params) {
     if (!EVENT.pontuacaoUrl) return Promise.resolve(null);
-    const query = new URLSearchParams(Object.assign({ action }, params)).toString();
+    const query = new URLSearchParams(Object.assign({ action, idConvidado: getIdConvidado() }, params)).toString();
     return fetch(`${EVENT.pontuacaoUrl}?${query}`)
       .then(r => r.json())
       .catch(() => null); // falha de rede não pode quebrar a experiência do convidado
   }
 
   let ultimoTotalEstalecas = null;
+
+  // preenche o painel expansível com o estado real de cada desafio e das fotos
+  function atualizarPainelEstalecas(dados) {
+    if (!dados) return;
+
+    const nomeEl = document.getElementById('estalecasPainelNome');
+    if (nomeEl) nomeEl.textContent = getNomeConvidado() || '—';
+
+    const lista = document.getElementById('estalecasListaDesafios');
+    if (lista && EVENT.desafios) {
+      lista.innerHTML = '';
+      EVENT.desafios.forEach(d => {
+        const feito = !!dados[d.codigo];
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="estalecas-check${feito ? ' feito' : ''}">${feito ? '✓' : '○'}</span><span>${d.titulo} · 10</span>`;
+        lista.appendChild(li);
+      });
+    }
+
+    const fotos = dados.fotos_pontuadas || 0;
+    const fotosCheck = document.getElementById('estalecasFotosCheck');
+    const fotosProgresso = document.getElementById('estalecasFotosProgresso');
+    if (fotosProgresso) fotosProgresso.textContent = `${fotos}/5`;
+    if (fotosCheck) {
+      fotosCheck.textContent = fotos >= 5 ? '✓' : '○';
+      fotosCheck.classList.toggle('feito', fotos >= 5);
+    }
+  }
 
   function atualizarContadorEstalecas(dados) {
     const el = document.getElementById('estalecasCounter');
@@ -1532,6 +1679,7 @@
 
     numeroEl.textContent = novoTotal;
     el.classList.remove('hidden');
+    atualizarPainelEstalecas(dados);
 
     if (ganhou) {
       el.classList.remove('pulse');
@@ -1548,6 +1696,24 @@
     }
 
     ultimoTotalEstalecas = novoTotal;
+  }
+
+  // abre/fecha o painel ao clicar no contador; fecha ao clicar fora
+  const estalecasBtn = document.getElementById('estalecasCounter');
+  const estalecasPainel = document.getElementById('estalecasPainel');
+  if (estalecasBtn && estalecasPainel) {
+    estalecasBtn.addEventListener('click', (evento) => {
+      evento.stopPropagation();
+      const estavaAberto = !estalecasPainel.classList.contains('hidden');
+      estalecasPainel.classList.toggle('hidden');
+      estalecasBtn.setAttribute('aria-expanded', String(!estavaAberto));
+    });
+    document.addEventListener('click', (evento) => {
+      if (estalecasPainel.classList.contains('hidden')) return;
+      if (estalecasPainel.contains(evento.target) || estalecasBtn.contains(evento.target)) return;
+      estalecasPainel.classList.add('hidden');
+      estalecasBtn.setAttribute('aria-expanded', 'false');
+    });
   }
 
   // busca a pontuação atual do convidado e re-marca no visual os desafios
@@ -1601,8 +1767,6 @@
     sincronizarPontuacao(nome);
     if (typeof renderPolaroids === 'function') renderPolaroids();
 
-    const primeiroNome = nome.split(' ')[0];
-
     function criarSpanNome(texto) {
       const span = document.createElement('span');
       span.className = 'guest-name';
@@ -1612,15 +1776,15 @@
 
     const rsvpConfirmedText = document.getElementById('rsvpConfirmedText');
     rsvpConfirmedText.textContent = 'presença confirmada, ';
-    rsvpConfirmedText.appendChild(criarSpanNome(primeiroNome));
+    rsvpConfirmedText.appendChild(criarSpanNome(nome));
     rsvpConfirmedText.appendChild(document.createTextNode(' ✓'));
 
     const kitGreeting = document.getElementById('kitGreeting');
     kitGreeting.textContent = '';
-    kitGreeting.appendChild(criarSpanNome(primeiroNome));
+    kitGreeting.appendChild(criarSpanNome(nome));
     kitGreeting.appendChild(document.createTextNode(', aqui está o que já deixamos combinado para você.'));
 
-    document.getElementById('leadGreetingName').textContent = `${primeiroNome}, `;
+    document.getElementById('leadGreetingName').textContent = `${nome}, `;
 
     rsvpForm.classList.add('hidden');
     rsvpConfirmedMsg.classList.remove('hidden');
@@ -1973,7 +2137,7 @@
   // o payload da imagem é grande demais pra caber numa URL
   function postarFotoNoBackend(nome, legenda, imagemBase64) {
     if (!EVENT.pontuacaoUrl) return Promise.resolve(null);
-    const corpo = new URLSearchParams({ action: 'postarFoto', nome, legenda: legenda || '', imagem: imagemBase64 });
+    const corpo = new URLSearchParams({ action: 'postarFoto', nome, legenda: legenda || '', imagem: imagemBase64, idConvidado: getIdConvidado() });
     return fetch(EVENT.pontuacaoUrl, { method: 'POST', body: corpo })
       .then(r => r.json())
       .catch(() => null);
