@@ -1441,18 +1441,30 @@
      Nada mais no arquivo precisa ser tocado.
      ====================================================================== */
   const EVENT = {
+    // =====================================================================
+    // FIXO DA CASA — não muda de um evento pro outro (mesmo local, mesmo
+    // telefone). Só mexa aqui se a casa ou o número de contato mudarem.
+    // =====================================================================
     local: "Alphaville Brasília",               // nome do local, usado em vários lugares
     endereco: "Residencial 2 e 3, Alameda Portugal, Quadra B, Lote 2", // detalhe, exibido só na capa
-    data: "Sábado 12 de setembro",           // como aparece na capa e no essencial
-    hora: "16h",                               // só o número/hora, sem "a partir das"
-    prazoRSVP: "quinta",                       // dia limite para confirmar presença
-
-    // link de convite do grupo/comunidade do WhatsApp (só o anfitrião manda mensagem ali)
-    grupoWhatsappLink: "https://chat.whatsapp.com/Edkhpqxfmp51H1ye1IEPGU",
     telefone: "+5561991766272",                // usado nos links "nos ligar"
-
     latitude: -16.064867,
     longitude: -47.798996,
+
+    // =====================================================================
+    // ESPECÍFICO DESTE EVENTO — revise TODOS os campos abaixo antes de
+    // reutilizar o convite pra um encontro novo.
+    // =====================================================================
+    // "data" e "hora" (o texto que o convidado vê, tipo "Sábado 12 de
+    // setembro" e "16h") não são digitados aqui — são calculados sozinhos
+    // logo abaixo, a partir de dataISO e horaInicio. Só esses dois precisam
+    // ser preenchidos; o texto bonito nunca fica dessincronizado deles.
+    prazoRSVP: "quinta",                       // dia limite para confirmar presença
+
+    // link de convite do grupo/comunidade do WhatsApp deste evento
+    // (crie um grupo novo a cada evento — reaproveitar o mesmo grupo mistura
+    // os convidados de encontros diferentes)
+    grupoWhatsappLink: "https://chat.whatsapp.com/Edkhpqxfmp51H1ye1IEPGU",
 
     // ---- liberação por tempo (seções 04, 05, 06 e o botão "estou saindo de casa") ----
     dataISO: "2026-09-12",     // data real do evento, formato AAAA-MM-DD
@@ -1464,11 +1476,15 @@
 
     // URL do Apps Script que guarda a pontuação (estalecas) dos convidados.
     // Sem essa URL, os desafios e as fotos continuam funcionando, só não pontuam.
+    // ⚠️ USE UMA PLANILHA NOVA A CADA EVENTO — reaproveitar a mesma planilha
+    // mistura os pontos e fotos de encontros diferentes na mesma aba.
     pontuacaoUrl: "https://script.google.com/macros/s/AKfycbz8jbhIY7-VscJdtMb1oVC9J3m1mXCGs9do6WYzTBLPCcE4AwZ4f5WuiAD3QHHXtH02BQ/exec",
 
+    // ⚠️ CHECKLIST FINAL ANTES DE PUBLICAR O EVENTO DE VERDADE:
     // MODO TESTE — deixe true enquanto estiver testando, para não precisar esperar dias.
     // nesse modo, os prazos acima são ignorados e os campos abaixo contam em MINUTOS
-    // a partir do momento em que a presença é confirmada. Mude para false no evento real.
+    // a partir do momento em que a presença é confirmada.
+    // → MUDE PARA false ANTES DO EVENTO REAL, senão tudo libera em minutos pra todo mundo.
     modoTeste: true,
     testeMinutos: {
       atividades: 1,   // "entre pratos e pausas" libera 1 min após confirmar presença
@@ -1551,6 +1567,26 @@
       { imagem: FOTO_DIA, legenda: "chegada, sábado" },
     ],
   };
+
+  /* ---------------------------------------------------------------------
+     Calcula "data" e "hora" (o texto que o convidado vê) a partir de
+     dataISO/horaInicio — fonte única, sem precisar digitar duas vezes.
+     --------------------------------------------------------------------- */
+  (function preencherDataEHoraDeExibicao() {
+    const DIAS_SEMANA = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+                    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+
+    const [ano, mes, dia] = EVENT.dataISO.split('-').map(Number);
+    // construído com ano/mês/dia separados (não a string direto) pra evitar
+    // o fuso horário deslocar a data em um dia
+    const dataObj = new Date(ano, mes - 1, dia);
+
+    EVENT.data = `${DIAS_SEMANA[dataObj.getDay()]} ${dia} de ${MESES[mes - 1]}`;
+
+    const [horaNum, minutoNum] = EVENT.horaInicio.split(':').map(Number);
+    EVENT.hora = minutoNum > 0 ? `${horaNum}h${String(minutoNum).padStart(2, '0')}` : `${horaNum}h`;
+  })();
 
   /* ---------------------------------------------------------------------
      A partir daqui é só mecânica — não precisa editar.
