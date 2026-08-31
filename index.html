@@ -1422,6 +1422,29 @@
   </div><!-- /afterRsvp -->
 
 <script>
+  // ------------------------------------------------------------------
+  // DIAGNÓSTICO TEMPORÁRIO — mostra qualquer erro de JavaScript direto
+  // na tela, num aviso vermelho no topo. Remover depois de identificar
+  // e corrigir o problema do "não consigo confirmar presença".
+  // ------------------------------------------------------------------
+  window.addEventListener('error', function(evento) {
+    var caixa = document.createElement('div');
+    caixa.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;' +
+      'background:#c0392b;color:#fff;padding:14px;font-family:monospace;' +
+      'font-size:12px;white-space:pre-wrap;line-height:1.5;';
+    caixa.textContent = 'ERRO DE JAVASCRIPT: ' + evento.message +
+      ' (linha ' + evento.lineno + ', coluna ' + evento.colno + ')';
+    document.body.appendChild(caixa);
+  });
+  window.addEventListener('unhandledrejection', function(evento) {
+    var caixa = document.createElement('div');
+    caixa.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;' +
+      'background:#c0392b;color:#fff;padding:14px;font-family:monospace;' +
+      'font-size:12px;white-space:pre-wrap;line-height:1.5;';
+    caixa.textContent = 'ERRO ASSÍNCRONO: ' + (evento.reason && evento.reason.message ? evento.reason.message : evento.reason);
+    document.body.appendChild(caixa);
+  });
+
   /* ======================================================================
      FOTOS DA CASA — usadas na capa (fundo) e na seção "a mensagem".
      Guardadas uma única vez aqui e reaproveitadas nos dois lugares,
@@ -1805,10 +1828,9 @@
 
     iniciarLiberacaoPorTempo();
 
-    // tenta abrir o WhatsApp por último, e protegido: dentro do navegador
-    // interno do próprio WhatsApp (quando o convite é aberto por um link
-    // mandado ali), essa chamada pode travar — mas isso não pode derrubar
-    // nada do que já foi confirmado acima
+    // tenta abrir o WhatsApp por último e protegido — se essa chamada falhar
+    // por qualquer motivo, isso não pode derrubar nada do que já foi
+    // confirmado acima
     try {
       const mensagem = `Oi! ${nome} ${EVENT.whatsappMensagem}`;
       const linkWhats = `https://wa.me/${EVENT.whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
