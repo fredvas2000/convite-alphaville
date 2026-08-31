@@ -326,14 +326,13 @@
     top:20px;
     left:20px;
     z-index:50;
-    width:48px;
-    height:48px;
-    padding:0;
+    max-width:min(220px, 60vw);
     display:flex;
     align-items:center;
-    justify-content:center;
+    gap:9px;
+    padding:8px 16px 8px 8px;
     background: linear-gradient(135deg, var(--stone) 0%, var(--stone-dim) 100%);
-    border-radius:50%;
+    border-radius:999px;
     border:1px solid var(--brick-dim);
     box-shadow: 0 4px 14px rgba(43,38,32,0.14);
     cursor:pointer;
@@ -345,8 +344,19 @@
     border-color: var(--amber);
     box-shadow: 0 4px 18px rgba(0,0,0,0.4);
   }
-  .estalecas-fixed.pulse{ transform: scale(1.12); }
-  .estalecas-fixed .estalecas-coin{ width:28px; height:28px; }
+  .estalecas-fixed.pulse{ transform: scale(1.06); }
+  .estalecas-fixed .estalecas-coin{ width:28px; height:28px; flex-shrink:0; }
+
+  .estalecas-nome-selo{
+    font-family:'Shippori Mincho', serif;
+    font-size:0.95rem;
+    color: var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    transition: color var(--dur) ease;
+  }
+  body.night .estalecas-nome-selo{ color: var(--cream); }
 
   .estalecas-painel{
     position:fixed;
@@ -502,9 +512,10 @@
   }
 
   @media (max-width:600px){
-    .estalecas-fixed{ top:14px; left:14px; width:42px; height:42px; }
+    .estalecas-fixed{ top:14px; left:14px; max-width:52vw; padding:6px 14px 6px 6px; gap:7px; }
     .estalecas-fixed .estalecas-coin{ width:24px; height:24px; }
-    .estalecas-painel{ top:64px; left:14px; padding:18px 18px 16px; }
+    .estalecas-nome-selo{ font-size:0.82rem; }
+    .estalecas-painel{ top:60px; left:14px; padding:18px 18px 16px; }
     .estalecas-painel-numero{ font-size:2.2rem; }
   }
 
@@ -1091,6 +1102,7 @@
       <circle cx="16" cy="16" r="9.5"/>
       <text x="16" y="21" text-anchor="middle">e</text>
     </svg>
+    <span class="estalecas-nome-selo" id="estalecasNomeSelo"></span>
     <span class="estalecas-popup" id="estalecasPopup"></span>
   </button>
 
@@ -1766,6 +1778,9 @@
     salvarNomeConvidado(nome);
     sincronizarPontuacao(nome);
     if (typeof renderPolaroids === 'function') renderPolaroids();
+
+    const nomeSeloEl = document.getElementById('estalecasNomeSelo');
+    if (nomeSeloEl) nomeSeloEl.textContent = nome.split(' ')[0];
 
     function criarSpanNome(texto) {
       const span = document.createElement('span');
