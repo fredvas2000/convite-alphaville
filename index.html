@@ -1838,9 +1838,13 @@
   // ---------------------------------------------------------------------
   // instantâneos — galeria de fotos em estilo polaroid
   // combina as fotos de exemplo (EVENT.fotos, fixas no código) com as fotos
-  // reais enviadas pelos convidados (guardadas no Drive via Apps Script)
+  // reais enviadas pelos convidados (guardadas como texto na planilha, sem Drive)
   // ---------------------------------------------------------------------
   let fotosDoBackend = [];
+
+  // capacidade máxima de texto que uma foto pode ocupar (deve bater com
+  // CHUNK_TAMANHO * NUM_CHUNKS lá no Apps Script) — deixando uma margem de segurança
+  const CAPACIDADE_MAXIMA_BASE64 = 600000;
 
   function renderPolaroids() {
     const board = document.getElementById('polaroidBoard');
@@ -1859,36 +1863,36 @@
     vazio.classList.add('hidden');
     board.innerHTML = '';
 
-    const nomeAtual = getNomeConvidado().trim().toLowerCase();
-
+    // sem checagem de dono, de propósito — qualquer convidado pode apagar
+    // qualquer foto enviada por outro convidado (fotos de exemplo do EVENT.fotos
+    // não têm fotoId, então nunca mostram o botão de excluir)
     todasFotos.forEach(foto => {
       const div = document.createElement('div');
       div.className = 'polaroid';
 
-      const ehMinha = foto.fileId && foto.nome && foto.nome.trim().toLowerCase() === nomeAtual;
-      const botaoExcluir = ehMinha
-        ? `<button class="polaroid-excluir" type="button" data-file-id="${foto.fileId}" aria-label="excluir esta foto">×</button>`
+      const botaoExcluir = foto.fotoId
+        ? `<button class="polaroid-excluir" type="button" data-foto-id="${foto.fotoId}" aria-label="excluir esta foto">×</button>`
         : '';
 
       div.innerHTML = `
         ${botaoExcluir}
-        <img src="${foto.imagem || foto.url}" alt="${foto.legenda || ''}" loading="lazy">
+        <img src="${foto.imagem}" alt="${foto.legenda || ''}" loading="lazy">
         <p class="caption">${foto.legenda || ''}</p>`;
       board.appendChild(div);
     });
 
     board.querySelectorAll('.polaroid-excluir').forEach(botao => {
-      botao.addEventListener('click', () => excluirFotoDaGaleria(botao.dataset.fileId, botao));
+      botao.addEventListener('click', () => excluirFotoDaGaleria(botao.dataset.fotoId, botao));
     });
   }
   renderPolaroids();
 
-  function excluirFotoDaGaleria(fileId, botaoEl) {
+  function excluirFotoDaGaleria(fotoId, botaoEl) {
     const nomeConvidado = getNomeConvidado();
-    if (!nomeConvidado || !fileId || !botaoEl) return;
+    if (!nomeConvidado || !fotoId || !botaoEl) return;
 
-    // primeiro clique só pede confirmação — nada de diálogo nativo do
-    // navegador, que pode ficar bloqueado dentro do sandbox de um artifact
+    // primeiro clique só pede confirmação — sem diálogo nativo do navegador,
+    // que pode ficar bloqueado dentro do sandbox de um artifact
     if (!botaoEl.classList.contains('confirmando')) {
       botaoEl.classList.add('confirmando');
       botaoEl.textContent = '✓';
@@ -1905,14 +1909,14 @@
     clearTimeout(botaoEl._timeoutConfirmacao);
     botaoEl.disabled = true;
 
-    chamarBackendPontuacao('excluirFoto', { nome: nomeConvidado, fileId }).then(resultado => {
+    chamarBackendPontuacao('excluirFoto', { nome: nomeConvidado, fotoId }).then(resultado => {
       if (!resultado || resultado.erro) {
         botaoEl.disabled = false;
         botaoEl.classList.remove('confirmando');
         botaoEl.textContent = '×';
         return;
       }
-      fotosDoBackend = fotosDoBackend.filter(f => f.fileId !== fileId);
+      fotosDoBackend = fotosDoBackend.filter(f => f.fotoId !== fotoId);
       renderPolaroids();
     });
   }
@@ -1927,9 +1931,10 @@
   }
   atualizarGaleriaDoBackend();
 
-  // comprime a imagem no navegador do convidado antes de enviar
-  // (celular tira foto grande demais pra mandar do jeito que está)
-  function comprimirImagem(arquivo, larguraMaxima, qualidade) {
+  // comprime a imagem no navegador do convidado antes de enviar. se mesmo
+  // comprimida ela ainda for grande demais pra planilha, tenta de novo com
+  // qualidade mais baixa — assim quase nunca falha por causa do tamanho
+  function comprimirImagemEmDataUrl(arquivo, larguraMaxima, qualidade) {
     return new Promise((resolve, reject) => {
       const leitor = new FileReader();
       leitor.onload = (evento) => {
@@ -1952,6 +1957,14 @@
       };
       leitor.onerror = () => reject(new Error('não foi possível ler o arquivo'));
       leitor.readAsDataURL(arquivo);
+    });
+  }
+
+  function comprimirComLimite(arquivo) {
+    return comprimirImagemEmDataUrl(arquivo, 1000, 0.72).then(dataUrl => {
+      if (dataUrl.length <= CAPACIDADE_MAXIMA_BASE64) return dataUrl;
+      // ainda grande demais — tenta de novo, mais compacto
+      return comprimirImagemEmDataUrl(arquivo, 700, 0.5);
     });
   }
 
@@ -1987,7 +2000,7 @@
       fotoBtn.disabled = true;
       fotoBtn.textContent = 'enviando...';
 
-      comprimirImagem(arquivo, 1200, 0.75)
+      comprimirComLimite(arquivo)
         .then(imagemComprimida => postarFotoNoBackend(nomeConvidado, '', imagemComprimida))
         .then(resultado => {
           fotoInput.value = '';
