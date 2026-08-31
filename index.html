@@ -1771,10 +1771,6 @@
       return;
     }
 
-    const mensagem = `Oi! ${nome} ${EVENT.whatsappMensagem}`;
-    const linkWhats = `https://wa.me/${EVENT.whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
-    window.open(linkWhats, '_blank', 'noopener');
-
     salvarNomeConvidado(nome);
     sincronizarPontuacao(nome);
     if (typeof renderPolaroids === 'function') renderPolaroids();
@@ -1808,6 +1804,18 @@
     body.classList.remove('lock-scroll');
 
     iniciarLiberacaoPorTempo();
+
+    // tenta abrir o WhatsApp por último, e protegido: dentro do navegador
+    // interno do próprio WhatsApp (quando o convite é aberto por um link
+    // mandado ali), essa chamada pode travar — mas isso não pode derrubar
+    // nada do que já foi confirmado acima
+    try {
+      const mensagem = `Oi! ${nome} ${EVENT.whatsappMensagem}`;
+      const linkWhats = `https://wa.me/${EVENT.whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+      window.open(linkWhats, '_blank', 'noopener');
+    } catch (e) {
+      // segue sem abrir o WhatsApp — a presença já foi confirmada de qualquer forma
+    }
   });
 
   // ---------------------------------------------------------------------
