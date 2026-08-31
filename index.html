@@ -1447,8 +1447,8 @@
     hora: "16h",                               // só o número/hora, sem "a partir das"
     prazoRSVP: "quinta",                       // dia limite para confirmar presença
 
-    whatsappNumero: "5561991766272",           // DDI+DDD+número, só dígitos
-    whatsappMensagem: "confirmando a presença", // vem depois de "Oi! [Nome] "
+    // link de convite do grupo/comunidade do WhatsApp (só o anfitrião manda mensagem ali)
+    grupoWhatsappLink: "https://chat.whatsapp.com/Edkhpqxfmp51H1ye1IEPGU",
     telefone: "+5561991766272",                // usado nos links "nos ligar"
 
     latitude: -16.064867,
@@ -1808,15 +1808,15 @@
 
     iniciarLiberacaoPorTempo();
 
-    // tenta abrir o WhatsApp por último e protegido — se essa chamada falhar
-    // por qualquer motivo, isso não pode derrubar nada do que já foi
-    // confirmado acima
+    // tenta abrir o convite do grupo/comunidade por último e protegido — se
+    // essa chamada falhar por qualquer motivo, isso não pode derrubar nada
+    // do que já foi confirmado acima
     try {
-      const mensagem = `Oi! ${nome} ${EVENT.whatsappMensagem}`;
-      const linkWhats = `https://wa.me/${EVENT.whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
-      window.open(linkWhats, '_blank', 'noopener');
+      if (EVENT.grupoWhatsappLink) {
+        window.open(EVENT.grupoWhatsappLink, '_blank', 'noopener');
+      }
     } catch (e) {
-      // segue sem abrir o WhatsApp — a presença já foi confirmada de qualquer forma
+      // segue sem abrir o link — a presença já foi confirmada de qualquer forma
     }
   });
 
