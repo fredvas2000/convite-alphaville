@@ -405,67 +405,106 @@
     letter-spacing:0.12em;
     text-transform:uppercase;
     opacity:0.55;
-    margin:2px 0 18px;
+    margin:2px 0 0;
   }
 
-  .estalecas-painel-titulo{
+  .estalecas-painel-subtitulo{
     font-family:'JetBrains Mono', monospace;
-    font-size:0.74rem;
-    letter-spacing:0.1em;
+    font-size:0.66rem;
+    letter-spacing:0.14em;
     text-transform:uppercase;
-    color: var(--brick);
-    margin:0 0 14px;
-    padding-top:14px;
-    border-top:1px solid var(--line);
-    transition: color var(--dur) ease, border-color var(--dur) ease;
+    opacity:0.5;
+    text-align:center;
+    margin:14px 0 16px;
   }
-  body.night .estalecas-painel-titulo{ color: var(--amber); border-color: var(--line-night); }
 
-  .estalecas-lista{
-    list-style:none;
-    margin:0;
-    padding:0;
+  .estalecas-selos-row{
     display:flex;
-    flex-direction:column;
-    gap:9px;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:18px;
   }
-  .estalecas-painel-item,
-  .estalecas-lista li{
+  .estalecas-selo-circulo{
+    width:46px;
+    height:46px;
+    border-radius:50%;
     display:flex;
-    align-items:baseline;
-    gap:10px;
-    font-size:0.9rem;
-    color: var(--ink-soft);
-    transition: color var(--dur) ease;
+    align-items:center;
+    justify-content:center;
+    border:1.5px solid var(--line);
+    position:relative;
+    transition: border-color var(--dur) ease, background var(--dur) ease;
   }
-  body.night .estalecas-painel-item,
-  body.night .estalecas-lista li{ color:#C9C4B0; }
-
-  .estalecas-check{
-    flex-shrink:0;
-    width:16px;
-    font-size:0.85rem;
-    color: var(--ink-soft);
-    transition: color var(--dur) ease;
+  .estalecas-selo-circulo.aceso{
+    border-color: var(--brick);
+    background: rgba(168,95,60,0.08);
   }
-  .estalecas-check.feito{ color: var(--brick); }
-  body.night .estalecas-check.feito{ color: var(--amber); }
+  body.night .estalecas-selo-circulo{ border-color: var(--line-night); }
+  body.night .estalecas-selo-circulo.aceso{ border-color: var(--amber); background: rgba(235,174,85,0.1); }
+  .estalecas-selo-circulo svg{
+    width:19px; height:19px;
+    stroke: var(--ink-soft);
+    stroke-width:1.7;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition: stroke var(--dur) ease;
+  }
+  .estalecas-selo-circulo svg .fill{ fill:currentColor; stroke:none; }
+  .estalecas-selo-circulo.aceso svg{ stroke: var(--brick); }
+  body.night .estalecas-selo-circulo.aceso svg{ stroke: var(--amber); }
+  .estalecas-selo-check{
+    position:absolute;
+    bottom:-3px; right:-3px;
+    width:15px; height:15px;
+    border-radius:50%;
+    background: var(--brick);
+    color: var(--cream);
+    font-size:8px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  body.night .estalecas-selo-check{ background: var(--amber); color: var(--night-sky); }
 
-  .estalecas-painel-item{ margin-top:12px; padding-top:12px; border-top:1px solid var(--line); transition: border-color var(--dur) ease; }
-  body.night .estalecas-painel-item{ border-color: var(--line-night); }
+  .estalecas-fotos-progresso{ margin-bottom:14px; }
+  .estalecas-fotos-label{
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    opacity:0.6;
+    margin-bottom:6px;
+  }
+  .estalecas-barra-fundo{
+    height:6px;
+    border-radius:99px;
+    background: var(--line);
+    overflow:hidden;
+    transition: background var(--dur) ease;
+  }
+  body.night .estalecas-barra-fundo{ background: var(--line-night); }
+  .estalecas-barra-preenchida{
+    height:100%;
+    border-radius:99px;
+    background: var(--brick);
+    transition: width 500ms ease, background var(--dur) ease;
+  }
+  body.night .estalecas-barra-preenchida{ background: var(--amber); }
 
-  .estalecas-painel-total{
+  .estalecas-painel-dica{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.64rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    opacity:0.4;
     margin:14px 0 0;
     padding-top:12px;
     border-top:1px solid var(--line);
-    font-family:'JetBrains Mono', monospace;
-    font-size:0.72rem;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    opacity:0.55;
     transition: border-color var(--dur) ease;
   }
-  body.night .estalecas-painel-total{ border-color: var(--line-night); }
+  body.night .estalecas-painel-dica{ border-color: var(--line-night); }
 
   .estalecas-coin{
     width:26px; height:26px;
@@ -778,6 +817,46 @@
     transition:color var(--dur) ease;
   }
   body.night .acc-foot-note em{ color:var(--amber-soft); }
+
+  .ponte-selos{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    background: rgba(168,95,60,0.07);
+    border-left:3px solid var(--brick);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    transition: background var(--dur) ease, border-color var(--dur) ease;
+  }
+  body.night .ponte-selos{ background: rgba(235,174,85,0.08); border-color: var(--amber); }
+
+  .ponte-selos-icones{
+    display:flex;
+    gap:7px;
+    flex-shrink:0;
+  }
+  .ponte-selos-icones svg{
+    width:17px; height:17px;
+    stroke: var(--brick);
+    stroke-width:1.8;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition: stroke var(--dur) ease;
+  }
+  body.night .ponte-selos-icones svg{ stroke: var(--amber); }
+  .ponte-selos-icones svg .fill{ fill:currentColor; stroke:none; }
+
+  .ponte-selos p{
+    margin:0;
+    font-size:0.96rem;
+    font-style:italic;
+    line-height:1.55;
+    color: var(--ink-soft);
+    transition: color var(--dur) ease;
+  }
+  body.night .ponte-selos p{ color:#C9C4B0; }
 
   .acc-greeting{
     font-family:'Shippori Mincho', serif;
@@ -1112,13 +1191,16 @@
     <p class="estalecas-painel-nome" id="estalecasPainelNome">—</p>
     <p class="estalecas-painel-numero" id="estalecasNumero">0</p>
     <p class="estalecas-painel-numero-label">estalecas</p>
-    <p class="estalecas-painel-titulo">como ganhar mais</p>
-    <ul class="estalecas-lista" id="estalecasListaDesafios"></ul>
-    <div class="estalecas-painel-item" id="estalecasItemFotos">
-      <span class="estalecas-check" id="estalecasFotosCheck">○</span>
-      <span>Enviar fotos pra galeria — <span id="estalecasFotosProgresso">0/5</span> · 10 cada</span>
+    <p class="estalecas-painel-subtitulo">seu progresso no encontro</p>
+    <div class="estalecas-selos-row" id="estalecasSelosRow" aria-hidden="true"></div>
+    <div class="estalecas-fotos-progresso">
+      <div class="estalecas-fotos-label">
+        <span>fotos enviadas</span>
+        <span id="estalecasFotosProgresso">0/5</span>
+      </div>
+      <div class="estalecas-barra-fundo"><div class="estalecas-barra-preenchida" id="estalecasBarraFotos" style="width:0%;"></div></div>
     </div>
-    <p class="estalecas-painel-total">total possível: 110</p>
+    <p class="estalecas-painel-dica">toque num selo apagado pra ver como acender ↴</p>
   </div>
 
   <!-- HERO + RSVP -->
@@ -1332,7 +1414,10 @@
         <span class="acc-chevron">+</span>
       </summary>
       <div class="acc-body">
-        <p class="acc-foot-note" style="margin-top:0;">Vamos soltando provocações no grupo do WhatsApp. Acertou a palavra? Desbloqueie aqui — cada uma vale 10 estalecas.</p>
+        <div class="ponte-selos">
+          <div class="ponte-selos-icones" id="ponteSelosIcones" aria-hidden="true"></div>
+          <p>Lá na capa, você viu estes cinco selos. Cada um se acende aqui — com uma palavra que a gente solta ao vivo, no grupo do WhatsApp, no momento certo do encontro — e vale 10 estalecas.</p>
+        </div>
         <div class="challenge-badges" id="challengeBadges" aria-hidden="true"></div>
         <div class="challenge-form">
           <input type="text" id="challengeInput" class="rsvp-input" placeholder="palavra-código" autocomplete="off">
@@ -1697,25 +1782,30 @@
     const nomeEl = document.getElementById('estalecasPainelNome');
     if (nomeEl) nomeEl.textContent = getNomeConvidado() || '—';
 
-    const lista = document.getElementById('estalecasListaDesafios');
-    if (lista && EVENT.desafios) {
-      lista.innerHTML = '';
-      EVENT.desafios.forEach(d => {
-        const feito = !!dados[d.codigo];
-        const li = document.createElement('li');
-        li.innerHTML = `<span class="estalecas-check${feito ? ' feito' : ''}">${feito ? '✓' : '○'}</span><span>${d.titulo} · 10</span>`;
-        lista.appendChild(li);
+    const selosRow = document.getElementById('estalecasSelosRow');
+    if (selosRow && EVENT.desafios && typeof BADGE_ICONS !== 'undefined') {
+      // um selo acende se QUALQUER desafio mapeado pra ele já foi feito
+      // (memória tem dois desafios que acendem o mesmo selo)
+      const selosAcesos = new Set(
+        EVENT.desafios.filter(d => dados[d.codigo]).map(d => d.selo)
+      );
+      selosRow.innerHTML = '';
+      BADGE_ICONS.forEach((icon, selo) => {
+        const aceso = selosAcesos.has(selo);
+        const div = document.createElement('div');
+        div.className = 'estalecas-selo-circulo' + (aceso ? ' aceso' : '');
+        div.title = icon.label;
+        div.innerHTML = `<svg viewBox="0 0 48 48">${icon.svg}</svg>` +
+          (aceso ? '<span class="estalecas-selo-check">✓</span>' : '');
+        selosRow.appendChild(div);
       });
     }
 
     const fotos = dados.fotos_pontuadas || 0;
-    const fotosCheck = document.getElementById('estalecasFotosCheck');
     const fotosProgresso = document.getElementById('estalecasFotosProgresso');
+    const barraFotos = document.getElementById('estalecasBarraFotos');
     if (fotosProgresso) fotosProgresso.textContent = `${fotos}/5`;
-    if (fotosCheck) {
-      fotosCheck.textContent = fotos >= 5 ? '✓' : '○';
-      fotosCheck.classList.toggle('feito', fotos >= 5);
-    }
+    if (barraFotos) barraFotos.style.width = `${Math.min(fotos / 5 * 100, 100)}%`;
   }
 
   function atualizarContadorEstalecas(dados) {
@@ -1967,6 +2057,13 @@
     { label: 'presença', svg: '<circle cx="18" cy="24" r="12"/><circle cx="30" cy="24" r="12"/>' },
     { label: 'memória', svg: '<circle class="fill" cx="10" cy="24" r="3"/><circle class="fill" cx="38" cy="24" r="3"/><path d="M15 24h18" stroke-dasharray="1 6.5"/>' },
   ];
+
+  // ícones estáticos da caixa de conexão (sempre os 5, sem estado — só ilustrativo)
+  (function renderPonteSelosIcones() {
+    const el = document.getElementById('ponteSelosIcones');
+    if (!el) return;
+    el.innerHTML = BADGE_ICONS.map(icon => `<svg viewBox="0 0 48 48">${icon.svg}</svg>`).join('');
+  })();
 
   const unlockedChallenges = new Set();
   const challengeBadgesEl = document.getElementById('challengeBadges');
