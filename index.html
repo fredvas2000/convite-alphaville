@@ -930,6 +930,22 @@
     text-align:right;
   }
 
+  .locked-row-provocacoes{
+    max-width:920px;
+    margin:0 auto;
+    padding:22px 8vw;
+    border-bottom:none;
+    border-radius:20px;
+    background: rgba(168,95,60,0.1);
+    justify-content:center;
+    text-align:center;
+    flex-wrap:wrap;
+    row-gap:6px;
+    transition: background var(--dur) ease;
+  }
+  body.night .locked-row-provocacoes{ background: rgba(235,174,85,0.09); }
+  .locked-row-provocacoes .locked-sub{ margin-left:0; text-align:center; width:100%; }
+
   .hidden{ display:none !important; }
 
   /* ---------- Aviso de saída ---------- */
@@ -1501,7 +1517,7 @@
   </section>
 
   <!-- PROVOCAÇÕES — seção própria, fora da lista numerada, revelada ao vivo -->
-  <div class="locked-row" id="lockDesafios">
+  <div class="locked-row locked-row-provocacoes" id="lockDesafios">
     <span class="lock-icon">🔒</span>
     <span class="locked-title">provocações</span>
     <span class="locked-sub mono" id="lockDesafiosSub">disponível em breve</span>
