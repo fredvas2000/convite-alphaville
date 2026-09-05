@@ -347,7 +347,6 @@
     box-shadow: 0 4px 18px rgba(0,0,0,0.4);
   }
   .estalecas-fixed.pulse{ transform: scale(1.06); }
-  .estalecas-fixed .estalecas-coin{ width:28px; height:28px; flex-shrink:0; }
 
   .estalecas-nome-selo{
     font-family:'Shippori Mincho', serif;
@@ -415,8 +414,12 @@
     text-transform:uppercase;
     opacity:0.5;
     text-align:center;
-    margin:14px 0 16px;
+    margin:20px 0 18px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    transition: border-color var(--dur) ease;
   }
+  body.night .estalecas-painel-subtitulo{ border-color: var(--line-night); }
 
   .estalecas-selos-row{
     display:flex;
@@ -492,42 +495,22 @@
   }
   body.night .estalecas-barra-preenchida{ background: var(--amber); }
 
-  .estalecas-painel-dica{
-    text-align:center;
-    font-family:'JetBrains Mono', monospace;
-    font-size:0.64rem;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    opacity:0.4;
-    margin:14px 0 0;
-    padding-top:12px;
-    border-top:1px solid var(--line);
-    transition: border-color var(--dur) ease;
-  }
-  body.night .estalecas-painel-dica{ border-color: var(--line-night); }
-
-  .estalecas-coin{
-    width:26px; height:26px;
+  .estalecas-inicial{
+    width:30px; height:30px;
     flex-shrink:0;
-  }
-  .estalecas-coin circle:first-child{
-    fill: var(--amber);
-    stroke: var(--brick);
-    stroke-width:1;
-  }
-  .estalecas-coin circle:nth-child(2){
-    fill:none;
-    stroke: var(--stone);
-    stroke-width:1.2;
-    stroke-dasharray:2.2 2.4;
-  }
-  body.night .estalecas-coin circle:nth-child(2){ stroke: var(--night-sky2); }
-  .estalecas-coin text{
+    border-radius:50%;
+    background: var(--brick);
+    color: var(--cream);
     font-family:'Shippori Mincho', serif;
-    font-size:11px;
-    fill: var(--brick);
+    font-size:1rem;
     font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    transition: background var(--dur) ease;
   }
+  body.night .estalecas-inicial{ background: var(--amber); color: var(--night-sky); }
 
   .estalecas-popup{
     position:absolute;
@@ -554,7 +537,7 @@
 
   @media (max-width:600px){
     .estalecas-fixed{ top:14px; left:14px; max-width:52vw; padding:6px 14px 6px 6px; gap:7px; }
-    .estalecas-fixed .estalecas-coin{ width:24px; height:24px; }
+    .estalecas-inicial{ width:26px; height:26px; font-size:0.9rem; }
     .estalecas-nome-selo{ font-size:0.82rem; }
     .estalecas-painel{ top:60px; left:14px; padding:18px 18px 16px; }
     .estalecas-painel-numero{ font-size:2.2rem; }
@@ -817,6 +800,50 @@
     transition:color var(--dur) ease;
   }
   body.night .acc-foot-note em{ color:var(--amber-soft); }
+
+  .provocacoes-section{
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 8vw 60px;
+    background: rgba(168,95,60,0.1);
+    border-radius:20px;
+    position:relative;
+    transition: background var(--dur) ease;
+  }
+  body.night .provocacoes-section{ background: rgba(235,174,85,0.09); }
+
+  .provocacoes-section::before{
+    content:'✳';
+    position:absolute;
+    top:26px; right:30px;
+    color: var(--brick);
+    font-size:1.1rem;
+    opacity:0.5;
+    transition: color var(--dur) ease;
+  }
+  body.night .provocacoes-section::before{ color: var(--amber); }
+
+  .prov-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color: var(--brick);
+    text-align:center;
+    margin:0 0 14px;
+    transition: color var(--dur) ease;
+  }
+  body.night .prov-eyebrow{ color: var(--amber); }
+
+  .prov-titulo{
+    font-family:'Shippori Mincho', serif;
+    font-size:clamp(1.8rem, 4.5vw, 2.4rem);
+    text-align:center;
+    margin:0 0 28px;
+    color: var(--ink);
+    transition: color var(--dur) ease;
+  }
+  body.night .prov-titulo{ color: var(--cream); }
 
   .ponte-selos{
     display:flex;
@@ -1178,11 +1205,7 @@
   </div>
 
   <button type="button" class="estalecas-fixed hidden" id="estalecasCounter" aria-expanded="false" aria-label="ver suas estalecas">
-    <svg class="estalecas-coin" viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="16" cy="16" r="14"/>
-      <circle cx="16" cy="16" r="9.5"/>
-      <text x="16" y="21" text-anchor="middle">e</text>
-    </svg>
+    <span class="estalecas-inicial" id="estalecasInicial"></span>
     <span class="estalecas-nome-selo" id="estalecasNomeSelo"></span>
     <span class="estalecas-popup" id="estalecasPopup"></span>
   </button>
@@ -1200,7 +1223,6 @@
       </div>
       <div class="estalecas-barra-fundo"><div class="estalecas-barra-preenchida" id="estalecasBarraFotos" style="width:0%;"></div></div>
     </div>
-    <p class="estalecas-painel-dica">toque num selo apagado pra ver como acender ↴</p>
   </div>
 
   <!-- HERO + RSVP -->
@@ -1401,32 +1423,6 @@
         <p class="acc-note">Não é obrigação, é convite. A melhor parte de reunir gente que a gente gosta é nunca saber exatamente o que vai voltar.</p>
       </div>
     </details>
-
-    <div class="locked-row" id="lockDesafios">
-      <span class="lock-icon">🔒</span>
-      <span class="locked-title">momentos de provocações</span>
-      <span class="locked-sub mono" id="lockDesafiosSub">disponível em breve</span>
-    </div>
-    <details class="acc-item hidden" name="secoes" id="accDesafios">
-      <summary>
-        <span class="acc-num mono">06</span>
-        <span class="acc-title">momentos de provocações</span>
-        <span class="acc-chevron">+</span>
-      </summary>
-      <div class="acc-body">
-        <div class="ponte-selos">
-          <div class="ponte-selos-icones" id="ponteSelosIcones" aria-hidden="true"></div>
-          <p>Lá na capa, você viu estes cinco selos. Cada um se acende aqui — com uma palavra que a gente solta ao vivo, no grupo do WhatsApp, no momento certo do encontro — e vale 10 estalecas.</p>
-        </div>
-        <div class="challenge-badges" id="challengeBadges" aria-hidden="true"></div>
-        <div class="challenge-form">
-          <input type="text" id="challengeInput" class="rsvp-input" placeholder="palavra-código" autocomplete="off">
-          <button class="btn-outline" id="challengeBtn" type="button">desbloquear</button>
-        </div>
-        <p class="challenge-feedback" id="challengeFeedback"></p>
-        <div class="challenge-list" id="challengeList"></div>
-      </div>
-    </details>
   </div>
 
   <!-- AVISO DE SAÍDA (botão fica desabilitado até a manhã do evento) -->
@@ -1442,7 +1438,7 @@
   <div class="acc-wrap hidden" id="travelAccordion">
     <details class="acc-item" name="secoes" id="travelDetails">
       <summary>
-        <span class="acc-num mono">07</span>
+        <span class="acc-num mono">06</span>
         <span class="acc-title">para a sua viagem</span>
         <span class="acc-chevron">+</span>
       </summary>
@@ -1502,6 +1498,30 @@
       <input type="file" id="fotoInput" accept="image/*" capture="environment" class="hidden">
       <button class="btn-outline" id="fotoBtn" type="button">enviar uma foto</button>
     </div>
+  </section>
+
+  <!-- PROVOCAÇÕES — seção própria, fora da lista numerada, revelada ao vivo -->
+  <div class="locked-row" id="lockDesafios">
+    <span class="lock-icon">🔒</span>
+    <span class="locked-title">provocações</span>
+    <span class="locked-sub mono" id="lockDesafiosSub">disponível em breve</span>
+  </div>
+  <section class="provocacoes-section hidden" id="accDesafios">
+    <p class="prov-eyebrow">só quem está lá vai saber</p>
+    <h2 class="prov-titulo">provocações</h2>
+
+    <div class="ponte-selos">
+      <div class="ponte-selos-icones" id="ponteSelosIcones" aria-hidden="true"></div>
+      <p>Lá na capa, você viu estes cinco selos. Cada um se acende aqui — com uma palavra que a gente solta ao vivo, no grupo do WhatsApp, no momento certo do encontro — e vale 10 estalecas.</p>
+    </div>
+
+    <div class="challenge-badges" id="challengeBadges" aria-hidden="true"></div>
+    <div class="challenge-form">
+      <input type="text" id="challengeInput" class="rsvp-input" placeholder="palavra-código" autocomplete="off">
+      <button class="btn-outline" id="challengeBtn" type="button">desbloquear</button>
+    </div>
+    <p class="challenge-feedback" id="challengeFeedback"></p>
+    <div class="challenge-list" id="challengeList"></div>
   </section>
 
   <footer class="mono" id="footerLocation">alphaville brasília</footer>
@@ -1906,6 +1926,9 @@
 
     const nomeSeloEl = document.getElementById('estalecasNomeSelo');
     if (nomeSeloEl) nomeSeloEl.textContent = nome.split(' ')[0];
+
+    const inicialEl = document.getElementById('estalecasInicial');
+    if (inicialEl) inicialEl.textContent = nome.trim().charAt(0).toUpperCase();
 
     function criarSpanNome(texto) {
       const span = document.createElement('span');
